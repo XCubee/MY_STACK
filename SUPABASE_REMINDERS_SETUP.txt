@@ -1,0 +1,46 @@
+MY STACK SUBSCRIPTION REMINDERS - SUPABASE SETUP
+
+FREE TO USE
+
+- The app does not have a paid tier, in-app purchase, or paywall for
+  subscriptions or reminders.
+- Local reminder notifications are provided by the phone and do not require
+  a paid notification service.
+- Supabase can be used on its Free plan for initial testing and small usage.
+  Supabase has usage limits and plan terms can change; check the current
+  Supabase pricing page if your project grows. This setup does not require
+  enabling a paid Supabase plan to try the feature.
+
+1. Open your Supabase project, then open SQL Editor.
+2. Open supabase-subscriptions-setup.sql from this Expo project.
+3. Paste the entire file into a new SQL query and run it.
+   This creates public.subscriptions, an index, and owner-only RLS policies.
+   It does not change the existing profiles or tools tables or their policies.
+4. In Supabase Dashboard > Project Settings > API (Data API), ensure the
+   public schema is exposed if your project uses a restricted exposed-schema
+   configuration. The app uses the authenticated Supabase client, not a
+   service-role key.
+5. Keep EXPO_PUBLIC_SUPABASE_URL and
+   EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY set in expo-client/.env, then restart
+   Expo after the SQL has been run.
+6. Sign in to the app, add a subscription, and allow notifications when
+   prompted. You can choose a reminder on renewal day or 1, 3, 7, or 14 days
+   before renewal.
+
+REMINDER BEHAVIOR AND LIMITATIONS
+
+- Subscription records are stored in Supabase and protected by RLS so each
+  signed-in user can read and change only their own records.
+- Renewal alerts are local notifications scheduled on the current device.
+  They are not Supabase/remote push notifications and do not require an Edge
+  Function, cron job, push token, or additional server secret.
+- The user must allow notifications and keep the app installed. Local
+  notification delivery depends on the phone's OS and notification settings.
+- The app cannot cancel a subscription or guarantee that a provider will not
+  charge you. Cancel with the provider before its renewal deadline.
+- The reminder is scheduled for 9:00 AM local device time on the selected
+  reminder date. A reminder already in the past is not scheduled.
+- When signing out, reminders belonging to that account are canceled on this
+  device. Signing in on another device requires enabling reminders there too.
+- Expo Go supports local notifications. Remote push notifications on Android
+  require a development build; remote push is not used by this feature.
